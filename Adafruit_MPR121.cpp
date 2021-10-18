@@ -29,7 +29,7 @@
 #include "Adafruit_MPR121.h"
 
 // uncomment to use autoconfig !
-//#define AUTOCONFIG // use autoconfig (Yes it works pretty well!)
+// #define AUTOCONFIG // use autoconfig (Yes it works pretty well!)
 
 /*!
  *  @brief      Default constructor
@@ -91,7 +91,7 @@ bool Adafruit_MPR121::begin(uint8_t i2caddr, TwoWire *theWire,
   writeRegister(MPR121_NCLT, 0x00);
   writeRegister(MPR121_FDLT, 0x00);
 
-  writeRegister(MPR121_DEBOUNCE, 0);
+  writeRegister(MPR121_DEBOUNCE, 0x22);
   writeRegister(MPR121_CONFIG1, 0x10); // default, 16uA charge current
   writeRegister(MPR121_CONFIG2, 0x20); // 0.5uS encoding, 1ms period
 
