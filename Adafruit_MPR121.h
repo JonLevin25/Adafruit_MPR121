@@ -31,6 +31,7 @@
 #define MPR121_I2CADDR_DEFAULT 0x5A        ///< default I2C address
 #define MPR121_TOUCH_THRESHOLD_DEFAULT 12  ///< default touch threshold value
 #define MPR121_RELEASE_THRESHOLD_DEFAULT 6 ///< default relese threshold value
+#define MPR121_USE_AUTOCONFIG_DEFAULT false
 
 /*!
  *  Device register map
@@ -85,7 +86,9 @@ class Ada_MPR121_Config {
   TwoWire *theWire = &Wire;
   uint8_t touchThreshold = MPR121_TOUCH_THRESHOLD_DEFAULT;
   uint8_t releaseThreshold = MPR121_RELEASE_THRESHOLD_DEFAULT;
-  
+
+  // autoconfig (Yes it works pretty well!)
+  bool use_autoconfig = MPR121_USE_AUTOCONFIG_DEFAULT;
 };
 
 /*!

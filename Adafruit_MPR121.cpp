@@ -28,9 +28,6 @@
 
 #include "Adafruit_MPR121.h"
 
-// uncomment to use autoconfig !
-// #define AUTOCONFIG // use autoconfig (Yes it works pretty well!)
-
 /*!
  *  @brief      Default constructor
  */
@@ -97,14 +94,15 @@ bool Adafruit_MPR121::begin(Ada_MPR121_Config *config, int8_t i2caddr) {
   writeRegister(MPR121_CONFIG1, 0x10); // default, 16uA charge current
   writeRegister(MPR121_CONFIG2, 0x20); // 0.5uS encoding, 1ms period
 
-#ifdef AUTOCONFIG
+if (config->use_autoconfig)
+{
   writeRegister(MPR121_AUTOCONFIG0, 0x0B);
 
   // correct values for Vdd = 3.3V
   writeRegister(MPR121_UPLIMIT, 200);     // ((Vdd - 0.7)/Vdd) * 256
   writeRegister(MPR121_TARGETLIMIT, 180); // UPLIMIT * 0.9
   writeRegister(MPR121_LOWLIMIT, 130);    // UPLIMIT * 0.65
-#endif
+}
 
   // enable X electrodes and start MPR121
   byte ECR_SETTING =
