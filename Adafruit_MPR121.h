@@ -22,6 +22,7 @@
 #ifndef ADAFRUIT_MPR121_H
 #define ADAFRUIT_MPR121_H
 
+#include "Adafruit_MPR121.h"
 #include "Arduino.h"
 #include <Adafruit_BusIO_Register.h>
 #include <Adafruit_I2CDevice.h>
@@ -77,6 +78,16 @@ enum {
 
 //.. thru to 0x1C/0x1D
 
+class Ada_MPR121_Config {
+  public:
+  Ada_MPR121_Config();
+  
+  TwoWire *theWire = &Wire;
+  uint8_t touchThreshold = MPR121_TOUCH_THRESHOLD_DEFAULT;
+  uint8_t releaseThreshold = MPR121_RELEASE_THRESHOLD_DEFAULT;
+  
+};
+
 /*!
  *  @brief  Class that stores state and functions for interacting with MPR121
  *  proximity capacitive touch sensor controller.
@@ -86,9 +97,7 @@ public:
   // Hardware I2C
   Adafruit_MPR121();
 
-  bool begin(uint8_t i2caddr = MPR121_I2CADDR_DEFAULT, TwoWire *theWire = &Wire,
-             uint8_t touchThreshold = MPR121_TOUCH_THRESHOLD_DEFAULT,
-             uint8_t releaseThreshold = MPR121_RELEASE_THRESHOLD_DEFAULT);
+  bool begin(Ada_MPR121_Config *config, int8_t i2caddr = MPR121_I2CADDR_DEFAULT);
 
   uint16_t filteredData(uint8_t t);
   uint16_t baselineData(uint8_t t);
