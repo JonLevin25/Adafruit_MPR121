@@ -25,16 +25,65 @@
  *
  *  BSD license, all text here must be included in any redistribution.
  */
-
 #include "Adafruit_MPR121.h"
+
+
+// MODIFIED By JonLevin (JonLevin25@GitHub)
+#include <assert.h>
+
+//// Helper fns
+// TODO: Extract to lib?
+void set_high_nibble(uint8_t *num8, uint8_t high)
+{
+    assert(high < 8);
+    *num8 &= 0x0F; // kill lower bits
+    *num8 |= (high << 4); // add high
+}
+
+void set_low_nibble(uint8_t *num8, uint8_t low)
+{
+    assert(low < 8);
+    *num8 &= 0xF0; // kill lower bits
+    *num8 |= low; // add low
+}
+
+void print_bool(uint8_t *num8, uint8_t p)
+{
+    for (int i=7; i>=0;i--) {
+        printf("%i", (p & (1<<i)) > 0);
+    }
+    printf("\n");
+}
+
+//// CONFIG OBJECT
+//
+Ada_MPR121_Config::Ada_MPR121_Config() {}
+
+void Ada_MPR121_Config::set_touch_debounce(uint8_t value)
+{
+  set_low_nibble(&this->debounce, value);
+}
+
+void Ada_MPR121_Config::set_release_debounce(uint8_t value)
+{
+  set_high_nibble(&this->debounce, value);
+}
+
+uint8_t Ada_MPR121_Config::get_debounce()
+{
+  return this->debounce;
+}
+
+
+
+
+///// Actual MPR121 object
+///
 
 /*!
  *  @brief      Default constructor
  */
 Adafruit_MPR121::Adafruit_MPR121() {}
-
-// default ctor
-Ada_MPR121_Config::Ada_MPR121_Config() {}
 
 /*!
  *  @brief    Begin an MPR121 object on a given I2C bus. This function resets
@@ -90,12 +139,13 @@ bool Adafruit_MPR121::begin(Ada_MPR121_Config *config, int8_t i2caddr) {
   writeRegister(MPR121_NCLT, 0x00);
   writeRegister(MPR121_FDLT, 0x00);
 
-  writeRegister(MPR121_DEBOUNCE, 0);
+  writeRegister(MPR121_DEBOUNCE, config->get_debounce());
   writeRegister(MPR121_CONFIG1, 0x10); // default, 16uA charge current
   writeRegister(MPR121_CONFIG2, 0x20); // 0.5uS encoding, 1ms period
 
 if (config->use_autoconfig)
 {
+  Serial.println("Using autoconfig!");
   writeRegister(MPR121_AUTOCONFIG0, 0x0B);
 
   // correct values for Vdd = 3.3V

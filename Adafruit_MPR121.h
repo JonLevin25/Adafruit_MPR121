@@ -89,6 +89,13 @@ class Ada_MPR121_Config {
 
   // autoconfig (Yes it works pretty well!)
   bool use_autoconfig = MPR121_USE_AUTOCONFIG_DEFAULT;
+
+  uint8_t get_debounce();
+  void set_touch_debounce(uint8_t value); // <= 7 !
+  void set_release_debounce(uint8_t value); // <= 7!
+
+  private:
+  uint8_t debounce;
 };
 
 /*!
