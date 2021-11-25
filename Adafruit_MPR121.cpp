@@ -99,16 +99,24 @@ Adafruit_MPR121::Adafruit_MPR121() {}
  *  @returns  true on success, false otherwise
  */
 bool Adafruit_MPR121::begin(Ada_MPR121_Config *config, int8_t i2caddr) {
+  assert(config);
+  this->config = config;
 
   if (i2c_dev) {
     delete i2c_dev;
   }
+
   i2c_dev = new Adafruit_I2CDevice(i2caddr, config->theWire);
 
   if (!i2c_dev->begin()) {
     return false;
   }
 
+  return soft_reset();
+}
+
+bool Adafruit_MPR121::soft_reset()
+{
   // soft reset
   writeRegister(MPR121_SOFTRESET, 0x63);
   delay(1);

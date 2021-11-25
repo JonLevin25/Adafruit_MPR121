@@ -108,6 +108,7 @@ public:
   Adafruit_MPR121();
 
   bool begin(Ada_MPR121_Config *config, int8_t i2caddr = MPR121_I2CADDR_DEFAULT);
+  bool soft_reset();
 
   uint16_t filteredData(uint8_t t);
   uint16_t baselineData(uint8_t t);
@@ -123,6 +124,7 @@ public:
 
 private:
   Adafruit_I2CDevice *i2c_dev = NULL;
+  Ada_MPR121_Config *config;
 };
 
 #endif
